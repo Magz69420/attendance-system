@@ -1,0 +1,8 @@
+from RPLCD.i2c import CharLCD
+import time
+lcd=CharLCD(i2c_expander='pcf8574'),address=0x27,port=1,cols=16,rosw=2,dotsize=8)
+lcd.clear()
+lcd.write_string('hello')
+lcd.crlf()
+lcd.write_string('Manasvi')
+time.sleep(2)
