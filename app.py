@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 import sqlite3
 from datetime import datetime
+import subprocess
 
 
 app = Flask(__name__)
@@ -29,5 +30,9 @@ def attendance():
     
     return render_template('index.html', selected_date=selected_date, attendance_data=attendance_data)
 
+
+
 if __name__ == '__main__':
     app.run(debug=True)
+
+git_push
