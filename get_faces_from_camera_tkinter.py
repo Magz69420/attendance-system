@@ -314,13 +314,14 @@ class Face_Register:
         self.GUI_info()
         self.process()
         self.win.mainloop()
+        
 
 
 def main():
     logging.basicConfig(level=logging.INFO)
     Face_Register_con = Face_Register()
     Face_Register_con.run()
-
+    
 
 if __name__ == '__main__':
     main()
