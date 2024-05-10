@@ -8,9 +8,6 @@ import logging
 import tkinter as tk
 from tkinter import font as tkFont
 from PIL import Image, ImageTk
-from RPLCD.i2c import CharLCD
-import time
-lcd= CharLCD(i2c_expander='PCF8574',address=0x27,port=1,cols=16,rows=2,dotsize=8)
 
 # Use frontal face detector of Dlib
 detector = dlib.get_frontal_face_detector()
@@ -94,7 +91,6 @@ class Face_Register:
         self.input_name_char = self.input_name.get()
         self.create_face_folder()
         self.label_cnt_face_in_database['text'] = str(self.existing_faces_cnt)
-       
 
     def GUI_info(self):
         tk.Label(self.frame_right_info,
@@ -165,7 +161,7 @@ class Face_Register:
                 person_order = person.split('_')[1].split('_')[0]
                 person_num_list.append(int(person_order))
             self.existing_faces_cnt = max(person_num_list)
-            
+
         # Start from person_1
         else:
             self.existing_faces_cnt = 0
@@ -199,10 +195,6 @@ class Face_Register:
 
         self.ss_cnt = 0  #  Clear the cnt of screen shots
         self.face_folder_created_flag = True  # Face folder already created
-        lcd.clear()
-        lcd.write_string("Name:\r\n{}".format(self.input_name_char))
-        lcd.crlf()
-        time.sleep(2)
 
     def save_current_face(self):
         if self.face_folder_created_flag:
@@ -219,26 +211,14 @@ class Face_Register:
                     self.log_all["text"] = "\"" + self.current_face_dir + "/img_face_" + str(
                         self.ss_cnt) + ".jpg\"" + " saved!"
                     self.face_ROI_image = cv2.cvtColor(self.face_ROI_image, cv2.COLOR_BGR2RGB)
-                    lcd.clear()
-                    lcd.write_string("\n\r {}".format(self.log_all["text"]))
-                    lcd.crlf()
-                    time.sleep(2)
 
                     cv2.imwrite(self.current_face_dir + "/img_face_" + str(self.ss_cnt) + ".jpg", self.face_ROI_image)
                     logging.info("%-40s %s/img_face_%s.jpg", "Save into：",
                                  str(self.current_face_dir), str(self.ss_cnt) + ".jpg")
                 else:
-                    self.log_all["text"] = "Stay in rang!"
-                    lcd.clear()
-                    lcd.write_string("error:\n\r {}".format(self.log_all["text"]))
-                    lcd.crlf()
-                    time.sleep(2)
+                    self.log_all["text"] = "Please do not out of range!"
             else:
-                self.log_all["text"] = "No face detected!"
-                lcd.clear()
-                lcd.write_string("error:\n\r {}".format(self.log_all["text"]))
-                lcd.crlf()
-                time.sleep(2)
+                self.log_all["text"] = "No face in current frame!"
         else:
             self.log_all["text"] = "Please run step 2!"
 
@@ -278,21 +258,10 @@ class Face_Register:
                         self.label_warning['fg'] = 'red'
                         self.out_of_range_flag = True
                         color_rectangle = (255, 0, 0)
-                        lcd.clear()
-                        lcd.cursor_pos = (0, 1)
-                        lcd.write_string("warning:\n\r {}".format(self.label_warning["text"]))
-                        lcd.crlf()
-                        time.sleep(2)
-                        lcd.clear()
                     else:
                         self.out_of_range_flag = False
-                        self.label_warning["text"] = "IN RANGE"
+                        self.label_warning["text"] = ""
                         color_rectangle = (255, 255, 255)
-                        lcd.clear()
-                        lcd.cursor_pos = (0, 1)
-                        lcd.write_string("warning:\n\r {}".format(self.label_warning["text"]))
-                        lcd.crlf()
-                        time.sleep(2)
                     self.current_frame = cv2.rectangle(self.current_frame,
                                                        tuple([d.left() - self.ww, d.top() - self.hh]),
                                                        tuple([d.right() + self.ww, d.bottom() + self.hh]),
@@ -314,18 +283,13 @@ class Face_Register:
         self.GUI_info()
         self.process()
         self.win.mainloop()
-        
 
 
 def main():
     logging.basicConfig(level=logging.INFO)
     Face_Register_con = Face_Register()
     Face_Register_con.run()
-    
+
 
 if __name__ == '__main__':
     main()
-
-lcd.clear()
-lcd.close(clear=True)
-lcd.crlf()
