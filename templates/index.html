@@ -56,7 +56,7 @@
     </head>
     <body>
         <div class="jumbotron text-center">
-            <h1 class="display-4">Attendance  Sheet</h1>
+            <h1 class="display-4">Attendance Tracker Sheet</h1>
         </div>
         <hr>
     
@@ -91,11 +91,34 @@
             </tbody>
         </table>
     </div>
-
-
     
 
+    <button onclick="downloadAttendanceData()" class="btn btn-primary mt-3">Download Attendance Data</button>
 
+    <script>
+        function downloadAttendanceData() {
+            // Sample data for demonstration
+            const data = [
+                ['Name', 'Time'],
+                ['John Doe', '08:00 AM'],
+                ['Jane Smith', '09:15 AM'],
+                ['Michael Johnson', '10:30 AM']
+            ];
+    
+            // Create a CSV file with the attendance data
+            const csvContent = "data:text/csv;charset=utf-8," + data.map(e => e.join(",")).join("\n");
+    
+            // Create a temporary anchor element
+            const link = document.createElement('a');
+            link.setAttribute('href', encodeURI(csvContent));
+            link.setAttribute('download', 'attendance_data.csv');
+            document.body.appendChild(link);
+    
+            // Simulate click event to trigger file download
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
 
 
 
