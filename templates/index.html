@@ -56,7 +56,7 @@
     </head>
     <body>
         <div class="jumbotron text-center">
-            <h1 class="display-4">Attendance  Sheet</h1>
+            <h1 class="display-4">Attendance Tracker Sheet</h1>
         </div>
         <hr>
     
@@ -92,24 +92,25 @@
         </table>
     </div>
 
+    <!-- Download Button -->
+<a href="#" id="download-btn" class="btn btn-primary">Download Data</a>
 
+<!-- Hidden form to submit date for downloading -->
+<form action="/download" method="POST" id="download-form">
+    <input type="hidden" id="download_date" name="download_date">
+</form>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+
+<!-- Custom JavaScript -->
+<script>
+    document.getElementById("download-btn").addEventListener("click", function() {
+        var selectedDate = document.getElementById("selected_date").value;
+        document.getElementById("download_date").value = selectedDate;
+        document.getElementById("download-form").submit();
+    });
+</script>
     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
