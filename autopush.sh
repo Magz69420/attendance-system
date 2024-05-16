@@ -1,13 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# Change directory to your Git repository
-cd /home/Denji/attendance-system
+cd $(dirname ${BASH_SOURCE[0]})
 
-# Add all changes to the staging area
-git add .
-
-# Commit changes with a default message
-git commit -m "Automatic commit by autopush script"
-
-# Push changes to the remote repository
-git push origin master
+if [[ -n $(git status -s) ]]; then
+    echo "Changes found. Pushing changes..."
+    git add -A && git commit -m 'update' && git push
+else
+    echo "No changes found. Skip pushing."
+fi

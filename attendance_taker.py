@@ -7,6 +7,8 @@ import time
 import logging
 import sqlite3
 import datetime
+from RPLCD.i2c import CharLCD
+lcd= CharLCD(i2c_expander='PCF8574',address=0x27,port=1,cols=16,rows=2,dotsize=8)
 
 
 # Dlib  / Use frontal face detector of Dlib
@@ -167,11 +169,19 @@ class Face_Recognizer:
 
         if existing_entry:
             print(f"{name} is already marked as present for {current_date}")
+            lcd.clear()
+            lcd.write_string("Name:\r{}".format(f"{name} already marked "))
+            lcd.crlf()
+            time.sleep(2)
         else:
             current_time = datetime.datetime.now().strftime('%H:%M:%S')
             cursor.execute("INSERT INTO attendance (name, time, date) VALUES (?, ?, ?)", (name, current_time, current_date))
             conn.commit()
             print(f"{name} marked as present for {current_date} at {current_time}")
+            lcd.clear()
+            lcd.write_string("Name:\r{}".format(f"{name} marked present"))
+            lcd.crlf()
+            time.sleep(2)
 
         conn.close()
 
@@ -208,6 +218,10 @@ class Face_Recognizer:
 
                     if "unknown" in self.current_frame_face_name_list:
                         self.reclassify_interval_cnt += 1
+                        lcd.clear()
+                        lcd.write_string("\r{}".format("unknown"))
+                        lcd.crlf()
+                        time.sleep(2)
 
                     if self.current_frame_face_cnt != 0:
                         for k, d in enumerate(faces):
@@ -306,6 +320,10 @@ class Face_Recognizer:
 
                 # 8.  'q'  / Press 'q' to exit
                 if kk == ord('q'):
+                    lcd.clear()
+                    lcd.write_string("\r{}".format("Data Saved"))
+                    lcd.crlf()
+                    time.sleep(2)
                     break
 
                 self.update_fps()
@@ -333,7 +351,13 @@ def main():
     logging.basicConfig(level=logging.INFO)
     Face_Recognizer_con = Face_Recognizer()
     Face_Recognizer_con.run()
+    
+
 
 
 if __name__ == '__main__':
     main()
+    
+lcd.clear()
+lcd.close(clear=True)
+lcd.crlf()
