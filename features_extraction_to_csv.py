@@ -6,9 +6,18 @@ import csv
 import numpy as np
 import logging
 import cv2
+import time
+from RPLCD.i2c import CharLCD
+lcd= CharLCD(i2c_expander='PCF8574',address=0x27,port=1,cols=16,rows=2,dotsize=8)
 
 #  Path of cropped faces
 path_images_from_camera = "data/data_faces_from_camera/"
+
+#  for LCD startup
+lcd.clear()
+lcd.write_string('Extracting..')
+lcd.crlf()
+time.sleep(2)
 
 #  Use frontal face detector of Dlib
 detector = dlib.get_frontal_face_detector()
@@ -88,7 +97,15 @@ def main():
             writer.writerow(features_mean_personX)
             logging.info('\n')
         logging.info("Save all the features of faces registered into: data/features_all.csv")
+        lcd.clear()
+        lcd.write_string('Done..')
+        lcd.crlf()
+        time.sleep(2)
 
 
 if __name__ == '__main__':
     main()
+
+lcd.clear()
+lcd.close(clear=True)
+lcd.crlf()

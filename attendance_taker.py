@@ -14,6 +14,12 @@ lcd= CharLCD(i2c_expander='PCF8574',address=0x27,port=1,cols=16,rows=2,dotsize=8
 # Dlib  / Use frontal face detector of Dlib
 detector = dlib.get_frontal_face_detector()
 
+# For LCD Startup
+lcd.clear()
+lcd.write_string('Taking attendance..')
+lcd.crlf()
+time.sleep(2)
+
 # Dlib landmark / Get face landmarks
 predictor = dlib.shape_predictor('data/data_dlib/shape_predictor_68_face_landmarks.dat')
 

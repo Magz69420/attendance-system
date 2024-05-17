@@ -15,6 +15,12 @@ lcd= CharLCD(i2c_expander='PCF8574',address=0x27,port=1,cols=16,rows=2,dotsize=8
 # Use frontal face detector of Dlib
 detector = dlib.get_frontal_face_detector()
 
+# for LCD startup
+lcd.clear()
+lcd.write_string('Taking input..')
+lcd.crlf()
+time.sleep(2)
+
 
 class Face_Register:
     def __init__(self):
